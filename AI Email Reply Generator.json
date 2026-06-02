@@ -1,0 +1,142 @@
+{
+  "name": "AI Email Reply Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cd1878e3-6d9a-4f78-b887-fe1652e5c69f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a8a3e4a7-31bd-4f62-8f66-405d0aa045b1",
+              "name": "name",
+              "value": "My internet connection is not working. Please help.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "97b31291-4ab2-457f-8e72-99ee26cef7e2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a professional email assistant.\n\nGenerate a polite and professional email reply.\n\nEmail:\n{{ $json.name }}\n\nRequirements:\n- Professional tone\n- Clear response\n- Under 100 words\n- Include greeting and closing"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "35a9939e-118d-414f-804b-ceb55c9a4523",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "WhkGqxYTVywn9VCC",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1042018-7ef3-4baa-9cff-ac4b6997e874",
+              "name": "reply",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "cb4d020c-76d6-44f6-ad35-338bc6ba7556",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "389d9df2-899e-4aa4-8cde-ecef796d2f6e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "860f278441a47ad954405c94bb7b907e2ba72afa0a4f6065d14aec931374edc0"
+  },
+  "id": "ig7wJmQj2maJv3vU",
+  "tags": []
+}
